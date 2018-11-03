@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Marked in the browser</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        function showContent() {
+            var c = marked(document.getElementById("md-text").innerHTML)
+            document.getElementById('content').innerHTML = c
+        }
+        function startup() {
+            document.getElementById("targetfile").addEventListener( 'change', function(e) {
+                var result = e.target.files[0]
+                var reader = new FileReader()
+                reader.readAsText(result)
+
+                reader.addEventListener( 'load', function() {
+                    document.getElementById("md-text").innerHTML = reader.result
+                    showContent()
+                })
+            })
+        }
+    </script>
+    <style type="text/css">
+        h1 {
+            text-align : center;
+            font-size: 1.4em;
+            letter-spacing: 0.2em;
+        }
+        .right {
+            text-align :right;
+            margin-right: 2em;
+        }
+        h3 {
+            border-bottom: 2px solid #888;
+        }
+        h4 {
+            font-size: 1em;
+            font-weight: normal;
+        }
+        h2, h3, h4 {
+            page-break-after:avoid;
+        }
+        p {
+            page-break-inside: avoid;
+            font-size: 0.94em;
+        }
+        body {
+            background-color: #eee;
+        }
+        #content, #md-text {
+            background-color: #fff;
+            margin : 1em;
+            padding: 1em;
+        }
+        @media print {
+            body {
+                background-color: transparent;
+            }
+            #form {
+                display:none;
+            }
+        }
+    </style>
+</head>
+<body onload="startup()">
+    <div id="form">
+        <p>pandocとかそういうのをインストールしてまで使うのが面倒だったから作ったもの。</p>
+        <p>mdファイルを読み込むと画面に表示してくれます。余計なものは印刷時非表示になります。</p>
+        <p>License: WTFPL</p>
+        <form>
+            <input type="file" name="targetfile" id="targetfile">
+        </form>
+        <details>
+            <summary>markdown</summary>
+            <pre id="md-text"></pre>
+        </details>
+    </div>
+    <div id="content"></div>
+</body>
+</html>
